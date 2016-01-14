@@ -1,0 +1,19 @@
+# Commet lines
+# Here we define compiler option, libraries and the target
+CXX = g++
+CXXFLAGS = -Wall -g
+
+PROG = helloworld
+
+# Here we make the executable file
+main: 	${PROG}.o
+	${CXX} ${CXXFLAG} ${PROG}.o -o main
+
+# Whereas here we create the object file
+objects = ${PROG}.o
+${PROG}.o :	${PROG}.cpp
+	${CXX} ${CXXFLAGS} -c ${PROG}.cpp
+
+# Clean
+clean:
+	rm ${objects}
