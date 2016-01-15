@@ -3,7 +3,7 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-PROG = binary  
+PROG = binary
 
 # Here we make the executable file
 main: 	${PROG}.o
