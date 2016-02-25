@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iomanip>
 #include <cmath>
+#include <sys/types.h>
+#include <sys/time.h>
 
 using namespace std;
 ofstream output;
@@ -31,6 +33,9 @@ int main()
 
 	// Generate the Tridiagnal Matrix A with (-1,2,-1) and b
 	for (int i=0; i<N; i++) {
+		x[i] = (i+1.0)*h;
+		b[i] = h*h*f(x[i]);
+		u[i] = sol(x[i]);
 		for (int j=0; j<N; j++) {
 			if (i == j) {
 				A[i][j] = 2.0;
@@ -38,13 +43,10 @@ int main()
 			else if ((i == (j-1)) || (i == (j+1)) ) {
 				A[i][j] = -1.0;
 			}
-			else {
+			else{ 
 				A[i][j]= 0.0;
 			}
 		}
-		x[i] = (i+1.0)*h;
-		b[i] = h*h*f(x[i]);
-		u[i] = sol(x[i]);
 	}
 	
 	// Call function for Gaussian elimination
@@ -67,6 +69,10 @@ void gaussian(double **a, int numb, double *b) {
 	int j, maxnumb;
 	double maxrow;
 	double at;
+	struct timeval tStart, tEnd;
+	double t;
+
+	gettimeofday (&tStart, 0);
 	for (int i=0; i < numb-1; i++) {
 		//working on i-th column:
 		//pivoting: make sure the a[i+1][i+1] is non-zero
@@ -118,4 +124,8 @@ void gaussian(double **a, int numb, double *b) {
 			b[i] -= b[j]*a[i][j]; 
 		}
 	}
+	gettimeofday( &tEnd, 0);
+	t = (tEnd.tv_sec - tStart.tv_sec) + 
+	    1.0e-6 * (tEnd.tv_usec - tStart.tv_usec);
+	cout << "Gaussian Elimination: t = " << t << endl;	
 } // end of function gaussian
